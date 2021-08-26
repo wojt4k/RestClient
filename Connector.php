@@ -4,33 +4,26 @@
 class Connector
 {
 	private $crl;
-	private $connParameters;
-	public function __construct(ArrayObject $connParameters = null) {
+	private $defaultParams;
+
+	public function __construct() {
 		$this->crl = curl_init();
-		$this->setParameters($connParameters);
-		print_r(curl_exec($this->crl));
+		$this->setDefaultParams();
 	}
 
-	private function setParameters(ArrayObject $data = null) {
-		if (count($data)) {
-			$this->connParameters = [
+	private function setDefaultParams() {
+	    $this->defaultParams = [
+            CURLOPT_HEADER => 0,
+            CURLOPT_RETURNTRANSFER => 1,
+        ];
+    }
 
-			];
-		} else {
-			$this->connParameters = [
-				CURLOPT_POST => 1,
-				CURLOPT_HEADER => 0,
-				CURLOPT_URL => 'xkcd.com/33/info.0.json',
-				CURLOPT_FRESH_CONNECT => 1,
-				CURLOPT_RETURNTRANSFER => 1,
-				CURLOPT_FORBID_REUSE => 1,
-				CURLOPT_TIMEOUT => 4,
-				CURLOPT_POSTFIELDS => http_build_query($data['fields'])
-			];
-		}
-		curl_setopt_array($this->crl, $this->connParameters);
+	public function setOptionalParams($data = []) {
+		curl_setopt_array($this->crl, $this->defaultParams + $data);
 	}
 
-
+    public function execute(): string {
+        return curl_exec($this->crl);
+    }
 
 }

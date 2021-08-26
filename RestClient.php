@@ -1,31 +1,44 @@
 <?php
-require 'Connector.php';
+require('Connector.php');
 
 class RestClient
 {
-	private Connector $conn;
-	public function __construct($url)
-	{
-		$this->conn = new Connector(['url' => $url]);
-	}
+    private $conn;
+    private string $address;
 
-	public function get(int $id)
-	{
-		curl_exec($this->conn);
-	}
+    public function __construct($address)
+    {
+        $this->conn = new Connector();
+        $this->address = $address;
+    }
 
-	public function post()
-	{
+    public function get($request)
+    {
+        $this->conn->setOptionalParams([
+            CURLOPT_URL => $this->address . '/' . $request
+        ]);
+        return $this->conn->execute();
+    }
 
-	}
+    public function post($data)
+    {
+        $this->conn->setOptionalParams([
+            CURLOPT_POST => 1,
+            CURLOPT_POSTFIELDS => $data
+        ]);
+        return $this->conn->execute();
+    }
 
-	public function put()
-	{
+    public function put($data)
+    {
+        $this->conn->setOptionalParams([
+            CURLOPT_PUT => 1,
+            CURLOPT_POSTFIELDS => $data
+        ]);
+    }
 
-	}
+    public function delete()
+    {
 
-	public function delete()
-	{
-
-	}
+    }
 }
