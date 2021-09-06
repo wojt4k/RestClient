@@ -3,12 +3,13 @@ require('Connector.php');
 
 class RestClient
 {
-    private $conn;
+    private Connector $conn;
     private string $address;
 
-    public function __construct($address)
+    public function __construct($address, array $authData = null)
     {
         $this->conn = new Connector();
+        $this->conn->authenticate($secret, $payload, $header)
         $this->address = $address;
     }
 
